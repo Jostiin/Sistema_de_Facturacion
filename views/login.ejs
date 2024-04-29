@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Facturación</title>
+    <link rel="stylesheet" href="<%=url%>/css/output.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="overflow-hidden">
+    <div class="w-screen h-screen grid grid-cols-2 ">
+        <div class="bg-blue-800 w-full h-full p-5 flex flex-col gap-20 ">
+            <img src="<%=url%>/img/V.center.O_logoWhite.png" class="w-40" alt="Logo v.center.o">
+            <img src="<%=url%>/img/wepik-export.png" alt="">
+        </div>
+        <div class="bg-white w-full h-full p-10 flex flex-col justify-start gap-10"> 
+            <div class="flex justify-end items-center gap-2">
+                <span class="text-gray-500">¿Necesitas ayuda?</span>
+                <button type="button" class=" text-gray-500 hover:text-white border border-gray-500 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-[10px] px-5 py-2 text-center  ">Contactanos</button>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h1 class="flex items-center text-5xl font-extrabold ">Sistema de Facturación</h1>
+                <small class="font-semibold text-gray-500 text-xl">Agiliza tu facturación.</small>
+            </div>
+            
+            <form id="LoginForm">
+                <div class="mb-5">
+                <label for="user" class="block mb-2 text-sm font-medium text-gray-900 ">Usuario</label>
+                <input type="text" id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "  required />
+                </div>
+                <div class="mb-5">
+                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
+                <input type="password" id="password"  name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  " required />
+                </div>
+                <button type="submit" class="text-white text-xl bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 Sfont-medium rounded-full px-10 py-4 text-center ">Ingresar</button>
+            </form>
+            <div class="flex justify-start items-center gap-2">
+                <img src="<%=url%>/img/logo_EloyAlfaro.png" class="w-10" alt="Logo Unidad Educativa Fiscal Eloy Alfaro">
+                <small>Unidad Educativa Fiscal Eloy Alfaro</small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function() {
+        
+        $("#LoginForm").submit(function(event) {
+           
+            // Evita que el formulario se envíe de forma predeterminada
+            event.preventDefault();
+            
+            // Obtiene los datos del formulario
+            var userData = {
+                user: $("#user").val(),
+                password: $("#password").val()
+            };
+    
+            fetch('login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Si el servidor ha redirigido, puedes obtener la URL de destino
+                    window.location.href = response.url;
+                } else {
+                    if (!response.ok) {
+                        throw new Error('Error al procesar la solicitud');
+                    }
+                    return response.text(); // Si esperas una respuesta de texto
+                }
+            })
+            .then(data => {
+                console.log(data); // Maneja la respuesta del servidor aquí
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            //Reiniciar valores
+            $("#user").val("")
+            $("#password").val("")
+        });
+    });
+</script>
